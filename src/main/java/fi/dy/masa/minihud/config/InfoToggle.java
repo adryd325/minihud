@@ -13,6 +13,9 @@ import fi.dy.masa.minihud.MiniHUD;
 
 public enum InfoToggle implements IConfigInteger, IHotkeyTogglable
 {
+    U_INFO_1                ("infoMicroInfo1",              false, 0, "", "Shows performance info in as little space as possible"),
+    U_INFO_2                ("infoMicroInfo2",              false, 1, "", "Shows position info in as little space as possible"),
+    U_INFO_1_TPS_COLOR      ("infoMicroInfo1TPSColor",      false, 1, "", "Shows color with TPS in uInfo1"),
     BEE_COUNT               ("infoBeeCount",                false, 36, "", "Show the number of bees in the targeted Hive or Nest.\nNote: This only works in single player without server-side support."),
     BIOME                   ("infoBiome",                   false, 19, "", "Show the name of the current biome"),
     BIOME_REG_NAME          ("infoBiomeRegistryName",       false, 20, "", "Show the registry name of the current biome"),

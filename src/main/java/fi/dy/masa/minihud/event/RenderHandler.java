@@ -122,7 +122,7 @@ public class RenderHandler implements IRenderer
             (Configs.Generic.REQUIRE_SNEAK.getBooleanValue() == false || this.mc.player.isSneaking()) &&
             Configs.Generic.REQUIRED_KEY.getKeybind().isKeybindHeld())
         {
-            if (InfoToggle.FPS.getBooleanValue())
+            if (InfoToggle.FPS.getBooleanValue() || InfoToggle.U_INFO_1.getBooleanValue())
             {
                 this.updateFps();
             }
@@ -295,6 +295,81 @@ public class RenderHandler implements IRenderer
         if (type == InfoToggle.FPS)
         {
             this.addLine(String.format("%d fps", this.fps));
+        }
+        else if (type == InfoToggle.U_INFO_1) 
+        {
+            try {
+            if (mc.isIntegratedServerRunning() && (mc.getServer().getTicks() % 10) == 0)
+            {
+                this.data.updateIntegratedServerTPS();
+            }
+            PlayerListEntry playerInfo = mc.player.networkHandler.getPlayerListEntry(mc.player.getUuid());
+            if (this.data.hasTPSData())
+            {
+                double tps = this.data.getServerTPS();
+                double mspt = this.data.getServerMSPT();
+                String hasTPSData = this.data.isCarpetServer() || mc.isInSingleplayer() ? "" : "?";
+
+                String TPSData = String.format("TPS: %.1f%s, MSPT: %.1f%s", tps, hasTPSData, mspt, hasTPSData);
+
+                if (InfoToggle.U_INFO_1_TPS_COLOR.getBooleanValue()) {
+                    // Carpet server and integrated server have actual meaningful MSPT data available
+                    String rst = GuiBase.TXT_RST;
+                    String preTps = tps >= 20.0D ? GuiBase.TXT_GREEN : GuiBase.TXT_RED;
+                    String preMspt;
+
+                    if (this.data.isCarpetServer() || mc.isInSingleplayer()) {
+                        if (mspt <= 40) {
+                            preMspt = GuiBase.TXT_GREEN;
+                        } else if (mspt <= 45) {
+                            preMspt = GuiBase.TXT_YELLOW;
+                        } else if (mspt <= 50) {
+                            preMspt = GuiBase.TXT_GOLD;
+                        } else {
+                            preMspt = GuiBase.TXT_RED;
+                        }
+
+                        TPSData = String.format("TPS: %s%.1f%s, MSPT: %s%.1f%s", preTps, tps, rst, preMspt, mspt, rst);
+                    } else {
+                        if (mspt <= 51) {
+                            preMspt = GuiBase.TXT_GREEN;
+                        } else {
+                            preMspt = GuiBase.TXT_RED;
+                        }
+
+                        TPSData = String.format("TPS: %s%.1f%s?, MSPT: %s%.1f%s?", preTps, tps, rst, preMspt, mspt, rst);
+                    }
+                }
+
+                this.addLine(String.format("FPS: %d, %s, Ping: %d",
+                        this.fps, 
+                        TPSData,
+                        playerInfo.getLatency()));
+            } else {
+                this.addLine(String.format("FPS: %d, Ping: %d",
+                        this.fps, 
+                        playerInfo.getLatency()));
+            }
+            } catch (Throwable error) {
+                error.printStackTrace();
+            }
+        }
+        else if (type == InfoToggle.U_INFO_2) { 
+            double x = entity.getX();
+            double z = entity.getZ();
+            double dx = x - entity.lastRenderX;
+            double dz = z - entity.lastRenderZ; 
+            Direction facing = entity.getHorizontalFacing();
+            String direction = "???";
+            switch (facing)
+            {
+                case NORTH: direction = "-Z (N)"; break;
+                case SOUTH: direction = "+Z (S)"; break;
+                case WEST:  direction = "-X (W)"; break;
+                case EAST:  direction = "+X (E)"; break;
+                default:
+            }
+            this.addLine(String.format("x: %.2f, y: %.2f, z: %.2f, Speed (XZ): %.2f, Facing: %s", x, y, z, Math.sqrt(dx * dx + dz * dz) * 20, direction));
         }
         else if (type == InfoToggle.MEMORY_USAGE)
         {
@@ -636,13 +711,13 @@ public class RenderHandler implements IRenderer
 
             if (InfoToggle.ROTATION_YAW.getBooleanValue())
             {
-                str.append(String.format("yaw: %.1f", MathHelper.wrapDegrees(entity.getYaw())));
+                str.append(String.format("Yaw: %.1f", MathHelper.wrapDegrees(entity.getYaw())));
                 pre = " / ";
             }
 
             if (InfoToggle.ROTATION_PITCH.getBooleanValue())
             {
-                str.append(pre).append(String.format("pitch: %.1f", MathHelper.wrapDegrees(entity.getPitch())));
+                str.append(pre).append(String.format("Pitch: %.1f", MathHelper.wrapDegrees(entity.getPitch())));
                 pre = " / ";
             }
 
@@ -652,7 +727,7 @@ public class RenderHandler implements IRenderer
                 double dy = entity.getY() - entity.lastRenderY;
                 double dz = entity.getZ() - entity.lastRenderZ;
                 double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                str.append(pre).append(String.format("speed: %.3f m/s", dist * 20));
+                str.append(pre).append(String.format("Speed: %.3f m/s", dist * 20));
             }
 
             this.addLine(str.toString());
@@ -665,7 +740,7 @@ public class RenderHandler implements IRenderer
         {
             double dx = entity.getX() - entity.lastRenderX;
             double dy = entity.getY() - entity.lastRenderY;
-            double dz = entity.getZ() - entity.lastRenderZ;
+            double dz = entity.getZ() - entity.lastRenderZ; 
             this.addLine(String.format("speed: xz: %.3f y: %.3f m/s", Math.sqrt(dx * dx + dz * dz) * 20, dy * 20));
         }
         else if (type == InfoToggle.SPEED_AXIS)
