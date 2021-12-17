@@ -83,6 +83,7 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean       USE_CUSTOMIZED_COORDINATES          = new ConfigBoolean("useCustomizedCoordinateFormat", true, "Use the customized coordinate format string");
         public static final ConfigBoolean       USE_FONT_SHADOW                     = new ConfigBoolean("useFontShadow", false, "Use font shadow");
         public static final ConfigBoolean       USE_TEXT_BACKGROUND                 = new ConfigBoolean("useTextBackground", true, "Use a solid background color behind the text");
+        public static final ConfigBoolean       RENDER_VANILLA_WHEN_HIDDEN          = new ConfigBoolean("renderVanillaDebugWhenHidden", false, "Render vanilla debuggers when MiniHUD is hidden");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 AXOLOTL_TOOLTIPS,
@@ -137,7 +138,9 @@ public class Configs implements IConfigHandler
                 TEXT_POS_X,
                 TEXT_POS_Y,
                 TIME_DAY_DIVISOR,
-                TIME_TOTAL_DIVISOR
+                TIME_TOTAL_DIVISOR,
+
+                RENDER_VANILLA_WHEN_HIDDEN
         );
 
         public static final List<ConfigHotkey> HOTKEY_LIST = ImmutableList.of(

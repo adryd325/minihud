@@ -1,11 +1,12 @@
 package fi.dy.masa.minihud.util;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
-import io.netty.buffer.Unpooled;
 import com.google.common.collect.MapMaker;
 import com.mojang.blaze3d.systems.RenderSystem;
+import fi.dy.masa.malilib.config.IConfigBoolean;
+import fi.dy.masa.minihud.config.Configs;
+import fi.dy.masa.minihud.config.RendererToggle;
+import fi.dy.masa.minihud.mixin.IMixinEntityNavigation;
+import io.netty.buffer.Unpooled;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.debug.DebugRenderer;
@@ -28,10 +29,10 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import fi.dy.masa.malilib.config.IConfigBoolean;
-import fi.dy.masa.minihud.config.Configs;
-import fi.dy.masa.minihud.config.RendererToggle;
-import fi.dy.masa.minihud.mixin.IMixinEntityNavigation;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 
 public class DebugInfoUtils
 {
@@ -279,6 +280,61 @@ public class DebugInfoUtils
         if (RendererToggle.DEBUG_WATER.getBooleanValue())
         {
             renderer.waterDebugRenderer.render(matrixStack, vtx, cameraX, cameraY, cameraZ);
+        }
+
+        if (RendererToggle.DEBUG_STRUCTURE.getBooleanValue())
+        {
+            renderer.structureDebugRenderer.render(matrixStack, vtx, cameraX, cameraY, cameraZ);
+        }
+
+        if (RendererToggle.DEBUG_VILLAGE.getBooleanValue())
+        {
+            renderer.villageDebugRenderer.render(matrixStack, vtx, cameraX, cameraY, cameraZ);
+        }
+
+        if (RendererToggle.DEBUG_VILLAGE_SECTIONS.getBooleanValue())
+        {
+            renderer.villageSectionsDebugRenderer.render(matrixStack, vtx, cameraX, cameraY, cameraZ);
+        }
+
+        if (RendererToggle.DEBUG_GOAL_SELECTOR.getBooleanValue())
+        {
+            renderer.goalSelectorDebugRenderer.render(matrixStack,vtx,cameraX,cameraY,cameraZ);
+        }
+
+        if (RendererToggle.DEBUG_GAME_EVENT.getBooleanValue())
+        {
+            renderer.gameEventDebugRenderer.render(matrixStack,vtx,cameraX,cameraY,cameraZ);
+        }
+
+        if (RendererToggle.DEBUG_BEES.getBooleanValue())
+        {
+            renderer.beeDebugRenderer.render(matrixStack, vtx, cameraX, cameraY, cameraZ);
+        }
+
+        if (RendererToggle.DEBUG_HEIGHTMAP.getBooleanValue())
+        {
+            renderer.heightmapDebugRenderer.render(matrixStack, vtx, cameraX, cameraY, cameraZ);
+        }
+
+        if (RendererToggle.DEBUG_SKYLIGHT.getBooleanValue())
+        {
+            renderer.skyLightDebugRenderer.render(matrixStack, vtx, cameraX, cameraY, cameraZ);
+        }
+
+        if (RendererToggle.DEBUG_WORLD_GEN.getBooleanValue())
+        {
+            renderer.worldGenAttemptDebugRenderer.render(matrixStack, vtx, cameraX, cameraY, cameraZ);
+        }
+
+        if (RendererToggle.DEBUG_CHUNK_LOADING.getBooleanValue())
+        {
+            renderer.chunkLoadingDebugRenderer.render(matrixStack, vtx, cameraX, cameraY, cameraZ);
+        }
+
+        if (RendererToggle.DEBUG_RAID.getBooleanValue())
+        {
+            renderer.raidCenterDebugRenderer.render(matrixStack, vtx, cameraX, cameraY, cameraZ);
         }
     }
 }
